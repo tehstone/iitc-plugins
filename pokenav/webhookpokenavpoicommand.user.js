@@ -129,12 +129,8 @@ function wrapper(plugin_info) {
 
   window.plugin.SendToWebhook.createGymCommand = function () {
     var portalData = window.portals[window.selectedPortal].options.data;
-    var p_name = portalData.title;
-    var p_latE6 = portalData.latE6;
-    var p_lngE6 = portalData.lngE6;
-    var p_lat = portalData.latE6 / 1e6;
-    var p_lng = portalData.lngE6 / 1e6;
-    var is_ex = document.getElementById("PogoGymEx");
+    const { p_name, p_lat, p_lng } = getPortalData(portalData);
+    var is_ex = document.getElementById('PogoGymEx');
 
     let PortalAssistBottext = '$create poi gym "' + p_name + '" ' + p_lat + " " + p_lng + "";
     if (is_ex && is_ex.checked) {
@@ -156,11 +152,7 @@ function wrapper(plugin_info) {
 
   window.plugin.SendToWebhook.createStopCommand = function () {
     var portalData = window.portals[window.selectedPortal].options.data;
-    var p_name = portalData.title;
-    var p_latE6 = portalData.latE6;
-    var p_lngE6 = portalData.lngE6;
-    var p_lat = portalData.latE6 / 1e6;
-    var p_lng = portalData.lngE6 / 1e6;
+    const {p_name, p_lat, p_lng } = getPortalData(portalData);
 
     var PortalAssistBottext =
       '$create poi pokestop "' + p_name + '" ' + p_lat + " " + p_lng + "";
@@ -176,12 +168,20 @@ function wrapper(plugin_info) {
     $(".QCPNotification").fadeIn(400).delay(3000).fadeOut(400);
   };
 
+  const getPortalData = function(portalData) {
+    return {
+      "p_name": portalData.title,
+      "p_lat": portalData.latE6 / 1e6,
+      "p_lng": portalData.lngE6 / 1e6,
+    };
+  }
+
   // Add an info property for IITC's plugin system
   setup.info = plugin_info;
 
   // Make sure window.bootPlugins exists and is an array
   if (!window.bootPlugins) window.bootPlugins = [];
-  
+
   // Add our startup hook
   window.bootPlugins.push(setup);
 
