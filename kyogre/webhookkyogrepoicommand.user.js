@@ -159,7 +159,7 @@ function wrapper(plugin_info) {
     const is_ex = document.getElementById("PogoGymEx");
     const label = chooseNewLabel();
 
-    let PortalAssistBottext =
+    const commandMessageText =
       "!loc add gym, " + p_name + ", " + p_lat + ", " + p_lng + ", " + label;
     if (is_ex && is_ex.checked) {
       commandMessageText += ", true";
@@ -172,7 +172,7 @@ function wrapper(plugin_info) {
     const portalData = window.portals[window.selectedPortal].options.data;
     const { p_name, p_lat, p_lng } = getPortalData(portalData);
 
-    const label = window.plugin.SendToWebhook.chooseNewLabel();
+    const label = chooseNewLabel();
 
     const commandMessageText =
       "!loc add stop, " + p_name + ", " + p_lat + ", " + p_lng + ", " + label;
