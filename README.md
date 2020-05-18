@@ -8,6 +8,7 @@ This repository has three scripts, which are to be used with [Ingress Intel Tota
 Plugins are forks of [Forte's PokeNav Quick Copy POI plugin](https://github.com/pkmngots/iitc-plugins) for the IITC Map. Additional code was taken from [Sunkast's version](https://gist.github.com/sunkast/f38961398f91b7a31e4d29e46dd1264a) of the same script. The original script was adapted to add two different use cases:
 
 1. For Kyogre bot, the script adds links to convert a stop to a gym, add a new gym, and add a new pokestop. These links send the relevent command directly to the channel your webhook is configured for.
+![Portal Info with Kyogre Script running](https://imgur.com/ZzDC8Bn)
 
 2. For Meowth bot, the script adds a links to the portal information, allowing you add either the `!addstop` or`!addgym` commands to the clipboard. If you have marked a gym as EX-eligible, it will use the `!addexraidgym` command. You can then paste the command in your bot command channel, to add the POI to Meowth.
 ![Portal Info with Meowth Script running](https://i.imgur.com/IInhyh0.png)
