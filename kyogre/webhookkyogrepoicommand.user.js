@@ -136,11 +136,7 @@ function wrapper(plugin_info) {
 
     window.plugin.SendToWebhook.convertToGymCommand = function() {
       var portalData = window.portals[window.selectedPortal].options.data;
-      var p_name = portalData.title;
-      var p_latE6 = portalData.latE6;
-      var p_lngE6 = portalData.lngE6;
-      var p_lat =portalData.latE6 / 1E6;
-      var p_lng = portalData.lngE6 / 1E6;
+      const { p_name, p_lat, p_lng } = getPortalData(portalData);
 
       var PortalAssistBottext ='!loc convert ' + p_name;
 
@@ -162,18 +158,9 @@ function wrapper(plugin_info) {
 
     window.plugin.SendToWebhook.createGymCommand = function() {
       var portalData = window.portals[window.selectedPortal].options.data;
-      var p_name = portalData.title;
-      var p_latE6 = portalData.latE6;
-      var p_lngE6 = portalData.lngE6;
-      var p_lat =portalData.latE6 / 1E6;
-      var p_lng = portalData.lngE6 / 1E6;
+      const { p_name, p_lat, p_lng } = getPortalData(portalData);
       var is_ex = document.getElementById('PogoGymEx');
-
       var label = window.plugin.SendToWebhook.chooseNewLabel();
-
-      var convenientGoogleMapsURL = 'http://maps.google.com/?ll=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6 + '&q=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6;
-      var convenientIntelURL= 'https://www.ingress.com/intel?ll=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6 + '&q=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6;
-
 
       if(is_ex && is_ex.checked) {
           var PortalAssistBottext ='!loc add gym, ' + p_name + ', ' + p_lat + ', ' + p_lng + ', ' + label + ', true';
@@ -211,17 +198,9 @@ function wrapper(plugin_info) {
 
     window.plugin.SendToWebhook.createStopCommand = function() {
       var portalData = window.portals[window.selectedPortal].options.data;
-      var p_name = portalData.title;
-      var p_latE6 = portalData.latE6;
-      var p_lngE6 = portalData.lngE6;
-      var p_lat = portalData.latE6 / 1E6;
-      var p_lng = portalData.lngE6 / 1E6;
+      const { p_name, p_lat, p_lng } = getPortalData(portalData);
 
       var label = window.plugin.SendToWebhook.chooseNewLabel();
-
-      var convenientGoogleMapsURL = 'GMAPS: http://maps.google.com/?ll=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6 + '&q=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6;
-      var convenientIntelURL= 'INTEL: https://www.ingress.com/intel?ll=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6 + '&q=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6;
-      var applemapsurl = 'APPLE: https://maps.apple.com/?ll=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6 + '&q=' + p_latE6 / 1E6 + ',' + p_lngE6 / 1E6;
 
       var PortalAssistBottext ='!loc add stop, ' + p_name + ', ' + p_lat + ', ' + p_lng + ', ' + label;
 
@@ -240,6 +219,15 @@ function wrapper(plugin_info) {
 
       $('.QCPNotification').fadeIn(400).delay(3000).fadeOut(400);
     };
+
+    const getPortalData = function(portalData) {
+      return {
+        "p_name": portalData.title,
+        "p_lat": portalData.latE6 / 1e6,
+        "p_lng": portalData.lngE6 / 1e6,
+      };
+    };
+
 
     // Add an info property for IITC's plugin system
     setup.info = plugin_info;
