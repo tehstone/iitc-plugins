@@ -58,11 +58,11 @@ function wrapper(plugin_info) {
 
   // The entry point for this plugin.
   function setup() {
-    var QCPNotifcation =
+    const QCPNotifcation =
       ".QCPNotification{width:200px;height:20px;height:auto;position:absolute;left:50%;margin-left:-100px;top:20px;z-index:10000;background-color: #383838;color: #F0F0F0;font-family: Calibri;font-size: 20px;padding:10px;text-align:center;border-radius: 2px;-webkit-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);-moz-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);}";
     $("head").append("<style>" + QCPNotifcation + "</style>");
 
-    var titleCSS = ".title{cursor:pointer;}";
+    const titleCSS = ".title{cursor:pointer;}";
     $("head").append("<style>" + titleCSS + "</style>");
     $("body").append(
       "<div class='QCPNotification' style='display:none'>Webhook Sent</div>"
@@ -128,44 +128,26 @@ function wrapper(plugin_info) {
   };
 
   window.plugin.SendToWebhook.createGymCommand = function () {
-    var portalData = window.portals[window.selectedPortal].options.data;
+    const portalData = window.portals[window.selectedPortal].options.data;
     const { p_name, p_lat, p_lng } = getPortalData(portalData);
-    var is_ex = document.getElementById('PogoGymEx');
+    const is_ex = document.getElementById('PogoGymEx');
 
-    let PortalAssistBottext = '$create poi gym "' + p_name + '" ' + p_lat + " " + p_lng + "";
+    let commandMessageText = '$create poi gym "' + p_name + '" ' + p_lat + " " + p_lng + "";
     if (is_ex && is_ex.checked) {
-      PortalAssistBottext += ' "ex_eligible: 1"';
+      commandMessageText += ' "ex_eligible: 1"';
     }
 
-    var request = new XMLHttpRequest();
-    request.open("POST", settings.webhookUrl);
-    request.setRequestHeader("Content-type", "application/json");
-    var params = {
-      username: "IngressMapper",
-      avatar_url:
-        "https://cdn.discordapp.com/attachments/533291273914941460/711554807906959411/IngressMapper.jpg",
-      content: PortalAssistBottext,
-    };
-    request.send(JSON.stringify(params));
-    $(".QCPNotification").fadeIn(400).delay(3000).fadeOut(400);
+    sendCommandToWebhook(commandMessageText);
   };
 
   window.plugin.SendToWebhook.createStopCommand = function () {
-    var portalData = window.portals[window.selectedPortal].options.data;
+    const portalData = window.portals[window.selectedPortal].options.data;
     const {p_name, p_lat, p_lng } = getPortalData(portalData);
 
-    var PortalAssistBottext =
+    const commandMessageText =
       '$create poi pokestop "' + p_name + '" ' + p_lat + " " + p_lng + "";
-    var request = new XMLHttpRequest();
-    request.open("POST", settings.webhookUrl);
-    request.setRequestHeader("Content-type", "application/json");
-    var params = {
-      username: settings.botName,
-      avatar_url: settings.avatarUrl,
-      content: PortalAssistBottext,
-    };
-    request.send(JSON.stringify(params));
-    $(".QCPNotification").fadeIn(400).delay(3000).fadeOut(400);
+    
+    sendCommandToWebhook(commandMessageText);
   };
 
   const getPortalData = function(portalData) {
@@ -175,6 +157,19 @@ function wrapper(plugin_info) {
       "p_lng": portalData.lngE6 / 1e6,
     };
   }
+
+  const sendCommandToWebhook = function(messageText) {
+    let request = new XMLHttpRequest();
+    request.open("POST", settings.webhookUrl);
+    request.setRequestHeader("Content-type", "application/json");
+    const params = {
+      username: settings.botName,
+      avatar_url: settings.avatarUrl,
+      content: messageText,
+    };
+    request.send(JSON.stringify(params));
+    $(".QCPNotification").fadeIn(400).delay(3000).fadeOut(400);
+  };
 
   // Add an info property for IITC's plugin system
   setup.info = plugin_info;
@@ -212,8 +207,8 @@ function wrapper(plugin_info) {
   }
 }
 // Create a script element to hold our content script
-var script = document.createElement("script");
-var info = {};
+let script = document.createElement("script");
+let info = {};
 
 // GM_info is defined by the assorted monkey-themed browser extensions
 // and holds information parsed from the script header.
@@ -226,7 +221,7 @@ if (typeof GM_info !== "undefined" && GM_info && GM_info.script) {
 }
 
 // Create a text node and our IIFE inside of it
-var textContent = document.createTextNode(
+let textContent = document.createTextNode(
   "(" + wrapper + ")(" + JSON.stringify(info) + ")"
 );
 
