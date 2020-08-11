@@ -2,7 +2,7 @@
 // @id quickCopyPortalnameplus
 // @name IITC Plugin: Webhook Raid Bot POI Command
 // @category Tweaks
-// @version 0.5.0
+// @version 0.6.0
 // @namespace
 // @description Sends command to add a Gym to Raid Bot with one click
 // @author tehstone. based on work by typographynerd, forked from Forte and Sunkast
@@ -96,6 +96,7 @@ function wrapper(plugin_info) {
               `<p><label for="textBotPrefix">Bot Command Prefix</label><br><input type="text" id="textBotPrefix" size="10" /></p>
                <p><label for="textBotName">Bot Display Name</label><br><input type="text" id="textBotName" size="20" /></p>
                <p><label for="textWebhookUrl">Webhook URL</label><br><input type="text" id="textWebhookUrl" size="40" /></p>
+               <p><label for="textWebhookUrlAlt">2nd Webhook URL (Optional)</label><br><input type="text" id="textWebhookUrlAlt" size="40" /></p>
                <p><label for="textAvatarUrl">Avatar URL</label><br><input type="text" id="textAvatarUrl" size="40" /></p>
                <p><label for="selectBotType">Raid Bot</label>
                 <select id="selectBotType">
@@ -128,6 +129,14 @@ function wrapper(plugin_info) {
 
     textWebhookUrlStr.addEventListener("change", (e) => {
       settings.webhookUrl = textWebhookUrlStr.value;
+      saveSettings();
+    });
+
+    const textWebhookUrlAltStr = div.querySelector("#textWebhookUrlAlt");
+    textWebhookUrlAltStr.value = settings.webhookUrlAlt;
+
+    textWebhookUrlAltStr.addEventListener("change", (e) => {
+      settings.webhookUrlAlt = textWebhookUrlAltStr.value;
       saveSettings();
     });
 
@@ -306,6 +315,15 @@ function wrapper(plugin_info) {
     };
     request.send(JSON.stringify(params));
     $(".QCPNotification").fadeIn(400).delay(3000).fadeOut(400);
+
+    request = new XMLHttpRequest();
+    if (settings.webhookUrlAlt.length > 0) {
+      request = new XMLHttpRequest();
+      request.open("POST", settings.webhookUrlAlt);
+      request.setRequestHeader("Content-type", "application/json");
+      request.send(JSON.stringify(params));
+    }
+    
   };
 
   // Add an info property for IITC's plugin system
@@ -321,6 +339,7 @@ function wrapper(plugin_info) {
   const defaultSettings = {
     botPrefix: "!",
     webhookUrl: "",
+    webhookUrlAlt: "",
     botName: "IngressMapper",
     avatarUrl:
       "https://cdn.discordapp.com/attachments/533291273914941460/711554807906959411/IngressMapper.jpg",
